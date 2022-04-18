@@ -16,9 +16,9 @@ export default class TopView extends JetView {
 			select: true,
 			template: "<span class='webix_icon #icon#'></span> #value# ",
 			data: [
-				{value: "Contacts", id: "start"},
-				{value: "Data",	id: "data"},
-				{value: "Settings",	id: "settings"}
+				{value: "Contacts", id: "startPage"},
+				{value: "Data",	id: "dataPage"},
+				{value: "Settings",	id: "settingsPage"}
 			]
 		};
 
