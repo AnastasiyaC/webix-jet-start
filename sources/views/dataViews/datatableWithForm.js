@@ -1,8 +1,8 @@
 import {JetView} from "webix-jet";
 
 export default class DatatableWithForm extends JetView {
-	constructor(app, name, data) {
-		super(app, name);
+	constructor(app, data) {
+		super(app);
 		this._gridData = data;
 	}
 
@@ -13,21 +13,31 @@ export default class DatatableWithForm extends JetView {
 					view: "form",
 					localId: "form_update-datatable",
 					elementsConfig: {
-						margin: 10
+						margin: 20
 					},
 					cols: [
 						{
 							view: "text",
 							name: "Name",
-							invalidMessage: "Enter name"
+							invalidMessage: "Enter name",
+							on: {
+								onFocus: () => {
+									this.$$("form_update-datatable").clearValidation();
+								}
+							}
 						},
 						{
-							view: "button",
-							value: "Add",
-							width: 200,
-							click: () => {
-								this.addToDatatable();
-							}
+							rows: [
+								{
+									view: "button",
+									value: "Add",
+									width: 200,
+									click: () => {
+										this.addToDatatable();
+									}
+								},
+								{ }
+							]
 						}
 					],
 					rules: {

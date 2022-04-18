@@ -13,6 +13,10 @@ export default class MyApp extends JetApp {
 		};
 
 		super({...defaults, ...config});
+
+		this.attachEvent("app:error:resolve", (err) => {
+			webix.delay(() => webix.message(`Catch error: ${err}`));
+		});
 	}
 }
 

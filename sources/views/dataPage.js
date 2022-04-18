@@ -1,7 +1,7 @@
 import {JetView} from "webix-jet";
 
-import {countries} from "../models/countries";
-import {statuses} from "../models/statuses";
+import countries from "../models/countries";
+import statuses from "../models/statuses";
 import DatatableWithForm from "./dataViews/datatableWithForm";
 
 
@@ -20,8 +20,8 @@ export default class DataView extends JetView {
 				},
 				{
 					cells: [
-						{id: "countries", rows: [new DatatableWithForm(this.app, "", countries)]},
-						{id: "statuses", rows: [new DatatableWithForm(this.app, "", statuses)]}
+						{id: "countries", rows: [new DatatableWithForm(this.app, countries)]},
+						{id: "statuses", rows: [new DatatableWithForm(this.app, statuses)]}
 					]
 				}
 			]
