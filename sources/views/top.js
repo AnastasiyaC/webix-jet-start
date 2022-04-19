@@ -3,8 +3,10 @@ import {JetView, plugins} from "webix-jet";
 
 export default class TopView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		let header = {
-			type: "header", template: "MENU", css: "webix_header app_header"
+			type: "header", template: _("MENU"), css: "webix_header app_header"
 		};
 
 		let menu = {
@@ -16,9 +18,9 @@ export default class TopView extends JetView {
 			select: true,
 			template: "<span class='webix_icon #icon#'></span> #value# ",
 			data: [
-				{value: "Contacts", id: "startPage"},
-				{value: "Data",	id: "dataPage"},
-				{value: "Settings",	id: "settingsPage"}
+				{value: _("Contacts"), id: "startPage"},
+				{value: _("Data"),	id: "dataPage"},
+				{value: _("Settings"),	id: "settingsPage"}
 			]
 		};
 

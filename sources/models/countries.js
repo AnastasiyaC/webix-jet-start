@@ -4,4 +4,8 @@ const countries = [
 	{id: 3, Name: "Italy"}
 ];
 
-export default countries;
+const countriesCollection = new webix.DataCollection({
+	data: countries
+});
+
+export default countriesCollection;

@@ -3,4 +3,8 @@ const statuses = [
 	{id: 2, Name: "Open", Icon: "user"}
 ];
 
-export default statuses;
+const statusesCollection = new webix.DataCollection({
+	data: statuses
+});
+
+export default statusesCollection;
