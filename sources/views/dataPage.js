@@ -7,6 +7,8 @@ import DatatableWithForm from "./dataViews/datatableWithForm";
 
 export default class DataView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
@@ -14,8 +16,8 @@ export default class DataView extends JetView {
 					value: "countries",
 					multiview: true,
 					options: [
-						{id: "countries", value: "Countries"},
-						{id: "statuses", value: "Statuses"}
+						{id: "countries", value: _("Countries")},
+						{id: "statuses", value: _("Statuses")}
 					]
 				},
 				{

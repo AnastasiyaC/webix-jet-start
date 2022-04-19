@@ -6,6 +6,8 @@ import statusesCollection from "../../models/statuses";
 
 export default class ContactsForm extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			view: "form",
 			localId: "contacts_form",
@@ -13,47 +15,70 @@ export default class ContactsForm extends JetView {
 			elements: [
 				{
 					view: "text",
-					label: "Name",
-					name: "Name"
+					label: _("Name"),
+					name: "Name",
+					on: {
+						onFocus: () => {
+							this.clearFormValidation();
+						}
+					}
 				},
 				{
 					view: "text",
-					label: "Email",
-					name: "Email"
+					label: _("Email"),
+					name: "Email",
+					on: {
+						onFocus: () => {
+							this.clearFormValidation();
+						}
+					}
 				},
 				{
 					view: "combo",
-					label: "Country",
+					label: _("Country"),
 					name: "Country",
 					options: {
 						body: {
 							template: "#Name#"
 						},
 						data: countriesCollection
+					},
+					on: {
+						onFocus: () => {
+							this.clearFormValidation();
+						}
 					}
 				},
 				{
 					view: "combo",
-					label: "Status",
+					label: _("Status"),
 					name: "Status",
 					options: {
 						body: {
 							template: "#Name#"
 						},
 						data: statusesCollection
+					},
+					on: {
+						onFocus: () => {
+							this.clearFormValidation();
+						}
 					}
 				},
 				{
 					cols: [
 						{
 							view: "button",
-							value: "Cancel",
-							width: 200
+							value: _("Cancel"),
+							width: 200,
+							click: () => {
+								this.calcelContactListUpdate();
+							}
 						},
 						{ },
 						{
 							view: "button",
-							value: "Save",
+							value: _("Save"),
 							css: "webix_primary",
 							width: 200,
 							click: () => {
@@ -72,27 +97,41 @@ export default class ContactsForm extends JetView {
 		};
 	}
 
-	urlChange(view) {
+	urlChange() {
+		this.setFormValues();
+	}
+
+	setFormValues() {
 		const id = this.getParam("id");
+		const form = this.$$("contacts_form");
 
 		if (id) {
 			const item = contactsCollection.getItem(id);
-			view.setValues(item);
+			form.setValues(item);
 		}
 		else {
-			this.$$("contacts_form").clear();
+			form.clear();
 		}
 	}
 
 	updateContact() {
+		const _ = this.app.getService("locale")._;
 		const form = this.$$("contacts_form");
 		const formValues = form.getValues();
 
 		if (!form.validate()) {
-			webix.message("Form is incomplete!!! Fill it to save the contact!");
+			webix.message(_("Incomplete form"));
 			return;
 		}
 		contactsCollection.updateItem(formValues.id, formValues);
-		webix.message("Contact is updated");
+		webix.message(_("Update contact"));
+	}
+
+	clearFormValidation() {
+		this.$$("contacts_form").clearValidation();
+	}
+
+	calcelContactListUpdate() {
+		this.setFormValues();
 	}
 }

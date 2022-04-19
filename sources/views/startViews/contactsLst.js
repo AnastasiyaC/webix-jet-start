@@ -1,15 +1,24 @@
 import {JetView} from "webix-jet";
 
 import contactsCollection from "../../models/contacts";
+import countriesCollection from "../../models/countries";
+import statusesCollection from "../../models/statuses";
 
 export default class ContactsList extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
 					view: "list",
 					localId: "contacts_list",
-					template: "name: <b>#Name#</b><br>email: #Email#<br>country: <br>status: <span style=\"float: right;\" class=\"webix_icon wxi-close\"></span>",
+					template: (obj) => {
+						const country = countriesCollection.getItem(obj.Country).Name || "country not found";
+						const status = statusesCollection.getItem(obj.Status).Name || "country not found";
+
+						return `name: <b>${obj.Name}</b><br>email: ${obj.Email}<br>country: ${country}<br>status: ${status}`;
+					},
 					select: true,
 					type: {
 						height: 130
@@ -19,14 +28,25 @@ export default class ContactsList extends JetView {
 					}
 				},
 				{
-					view: "button",
-					label: "Add",
-					css: "webix_primary",
-					click: () => {
-						this.addNewContact();
-					}
-				},
-				{ }
+					view: "toolbar",
+					cols: [
+						{ },
+						{
+							template: `<span>${_("Add new contact")}:</span>`,
+							borderless: true,
+							css: "template--add_contact"
+						},
+						{
+							view: "button",
+							label: _("Add"),
+							css: "webix_primary",
+							width: 200,
+							click: () => {
+								this.addNewContact();
+							}
+						}
+					]
+				}
 			]
 		};
 	}
@@ -37,6 +57,14 @@ export default class ContactsList extends JetView {
 
 		this.setIdParam(list);
 		this.on(list, "onAfterSelect", id => this.show(`./startPage?id=${id}`));
+	}
+
+	urlChange() {
+		const idParam = this.getParam("id");
+		const list = this.$$("contacts_list");
+
+		if (idParam) return;
+		list.unselect(list.getSelectedId());
 	}
 
 	setIdParam(list) {
@@ -52,14 +80,20 @@ export default class ContactsList extends JetView {
 	}
 
 	showEmptyList() {
-		webix.message("Contact list is empty...");
+		const _ = this.app.getService("locale")._;
+
+		webix.message(_("Empty list"));
 		this.show("/top/startPage");
 	}
 
 	deleteContact(id) {
+		const _ = this.app.getService("locale")._;
+
 		webix.confirm({
-			title: "Delete...",
-			text: "Do you still want to delete this contact?"
+			title: _("Delete"),
+			text: _("Delete contact"),
+			ok: _("Yes"),
+			cancel: _("No")
 		}).then(
 			() => {
 				const list = this.$$("contacts_list");
@@ -78,6 +112,7 @@ export default class ContactsList extends JetView {
 	}
 
 	addNewContact() {
+		const _ = this.app.getService("locale")._;
 		const list = this.$$("contacts_list");
 		const newContact = {
 			Name: "New Name",
@@ -86,7 +121,7 @@ export default class ContactsList extends JetView {
 			Country: 1
 		};
 
-		contactsCollection.add(newContact);
-		list.select(list.getLastId());
+		list.select(contactsCollection.add(newContact));
+		webix.message(_("Add contact"));
 	}
 }
