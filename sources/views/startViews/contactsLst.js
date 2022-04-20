@@ -65,7 +65,7 @@ export default class ContactsList extends JetView {
 		const list = this.$$("contacts_list");
 
 		if (idParam) return;
-		list.unselect(list.getSelectedId());
+		list.unselectAll();
 	}
 
 	setIdParam() {
