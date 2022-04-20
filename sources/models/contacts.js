@@ -3,4 +3,8 @@ const contacts = [
 	{id: 2, Name: "Doris Wan", Email: "doris@gmail.com", Status: 1, Country: 3}
 ];
 
-export default contacts;
+const contactsCollection = new webix.DataCollection({
+	data: contacts
+});
+
+export default contactsCollection;

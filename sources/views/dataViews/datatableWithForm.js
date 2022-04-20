@@ -7,6 +7,8 @@ export default class DatatableWithForm extends JetView {
 	}
 
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
@@ -18,11 +20,11 @@ export default class DatatableWithForm extends JetView {
 					cols: [
 						{
 							view: "text",
-							name: "Name",
+							name: _("Name"),
 							invalidMessage: "Enter name",
 							on: {
 								onFocus: () => {
-									this.$$("form_update-datatable").clearValidation();
+									this.clearFormValidation();
 								}
 							}
 						},
@@ -30,7 +32,7 @@ export default class DatatableWithForm extends JetView {
 							rows: [
 								{
 									view: "button",
-									value: "Add",
+									value: _("Add"),
 									width: 200,
 									click: () => {
 										this.addToDatatable();
@@ -52,14 +54,16 @@ export default class DatatableWithForm extends JetView {
 					select: true,
 					columns: [
 						{id: "id", header: "", width: 50},
-						{id: "Name", header: "Name", editor: "text", fillspace: true},
+						{id: "Name", header: _("Name"), editor: "text", fillspace: true},
 						{id: "delete", header: "", template: "{common.trashIcon()}"}
 					],
 					onClick: {
 						"wxi-trash": function (e, id) {
 							webix.confirm({
-								title: "Delete...",
-								text: "Do you still want delete this line?"
+								title: _("Delete"),
+								text: _("Delete line"),
+								ok: _("Yes"),
+								cancel: _("No")
 							}).then(() => {
 								this.remove(id);
 							});
@@ -78,6 +82,7 @@ export default class DatatableWithForm extends JetView {
 	}
 
 	addToDatatable() {
+		const _ = this.app.getService("locale")._;
 		const form = this.$$("form_update-datatable");
 		const datatable = this.$$("datatable_main");
 
@@ -86,7 +91,11 @@ export default class DatatableWithForm extends JetView {
 
 			datatable.add(item);
 			form.clear();
-			webix.message("Datatable was updated!");
+			webix.message(_("Update datatable"));
 		}
+	}
+
+	clearFormValidation() {
+		this.$$("form_update-datatable").clearValidation();
 	}
 }
