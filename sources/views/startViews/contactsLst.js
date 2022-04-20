@@ -60,6 +60,10 @@ export default class ContactsList extends JetView {
 		list.sync(contactsCollection);
 
 		this.setIdParam();
+		webix.promise.all([
+			countriesCollection.waitData,
+			statusesCollection.waitData
+		]).then(() => list.refresh());
 		this.on(list, "onAfterSelect", id => this.show(`./startPage?id=${id}`));
 	}
 
@@ -72,11 +76,7 @@ export default class ContactsList extends JetView {
 	}
 
 	setIdParam() {
-		webix.promise.all([
-			contactsCollection.waitData,
-			countriesCollection.waitData,
-			statusesCollection.waitData
-		]).then(() => {
+		contactsCollection.waitData.then(() => {
 			const list = this.$$("contacts_list");
 			const idParam = this.getParam("id") || list.getFirstId();
 
@@ -134,8 +134,8 @@ export default class ContactsList extends JetView {
 
 		contactsCollection.waitSave(() => {
 			contactsCollection.add(newContact);
-		}).then(() => {
-			list.select(list.getLastId());
+		}).then((obj) => {
+			list.select(obj.id);
 			webix.message(_("Add contact"));
 		});
 	}
