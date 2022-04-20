@@ -15,7 +15,11 @@ export default class ContactsForm extends JetView {
 			elementsConfig: {
 				on: {
 					onFocus: () => {
-						this.clearFormValidation();
+						const name = this.config.name;
+
+						if (name) {
+							this.clearFormValidation();
+						}
 					}
 				}
 			},
