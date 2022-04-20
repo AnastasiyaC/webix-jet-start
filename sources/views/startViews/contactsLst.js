@@ -55,7 +55,7 @@ export default class ContactsList extends JetView {
 		const list = this.$$("contacts_list");
 		list.parse(contactsCollection);
 
-		this.setIdParam(list);
+		this.setIdParam();
 		this.on(list, "onAfterSelect", id => this.show(`./startPage?id=${id}`));
 	}
 
@@ -67,7 +67,8 @@ export default class ContactsList extends JetView {
 		list.unselect(list.getSelectedId());
 	}
 
-	setIdParam(list) {
+	setIdParam() {
+		const list = this.$$("contacts_list");
 		const idParam = this.getParam("id") || list.getFirstId();
 
 		if (!idParam) {
