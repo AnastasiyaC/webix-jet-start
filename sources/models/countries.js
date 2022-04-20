@@ -1,11 +1,6 @@
-const countries = [
-	{id: 1, Name: "USA"},
-	{id: 2, Name: "Canada"},
-	{id: 3, Name: "Italy"}
-];
-
 const countriesCollection = new webix.DataCollection({
-	data: countries
+	url: "http://localhost:8096/api/v1/countries/",
+	save: "rest->http://localhost:8096/api/v1/countries/"
 });
 
 export default countriesCollection;

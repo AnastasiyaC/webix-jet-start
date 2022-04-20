@@ -15,10 +15,13 @@ export default class ContactsList extends JetView {
 					localId: "contacts_list",
 					css: "list--position",
 					template: (obj) => {
-						const country = countriesCollection.getItem(obj.Country).Name || "country not found";
-						const status = statusesCollection.getItem(obj.Status).Name || "country not found";
+						const country = countriesCollection.getItem(obj.Country);
+						const status = statusesCollection.getItem(obj.Status);
 
-						return `name: <b>${obj.Name}</b><br>email: ${obj.Email}<br>country: ${country}<br>status: ${status} <span class="webix_icon wxi-close webix_icon--pos_right-top"></span>`;
+						const countryName = country ? country.Name : "country not found";
+						const statusName = status ? status.Name : "status not found";
+
+						return `name: <b>${obj.Name}</b><br>email: ${obj.Email}<br>country: ${countryName}<br>status: ${statusName} <span class="webix_icon wxi-close webix_icon--pos_right-top"></span>`;
 					},
 					select: true,
 					type: {
@@ -69,16 +72,22 @@ export default class ContactsList extends JetView {
 	}
 
 	setIdParam() {
-		const list = this.$$("contacts_list");
-		const idParam = this.getParam("id") || list.getFirstId();
+		webix.promise.all([
+			contactsCollection.waitData,
+			countriesCollection.waitData,
+			statusesCollection.waitData
+		]).then(() => {
+			const list = this.$$("contacts_list");
+			const idParam = this.getParam("id") || list.getFirstId();
 
-		if (!idParam) {
-			this.showEmptyList();
-			return;
-		}
+			if (!idParam) {
+				this.showEmptyList();
+				return;
+			}
 
-		this.setParam("id", idParam, true);
-		list.select(idParam);
+			this.setParam("id", idParam, true);
+			list.select(idParam);
+		});
 	}
 
 	showEmptyList() {
@@ -123,7 +132,11 @@ export default class ContactsList extends JetView {
 			Country: 1
 		};
 
-		list.select(contactsCollection.add(newContact));
-		webix.message(_("Add contact"));
+		contactsCollection.waitSave(() => {
+			contactsCollection.add(newContact);
+		}).then(() => {
+			list.select(list.getLastId());
+			webix.message(_("Add contact"));
+		});
 	}
 }

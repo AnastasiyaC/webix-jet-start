@@ -93,16 +93,22 @@ export default class ContactsForm extends JetView {
 	}
 
 	setFormValues() {
-		const id = this.getParam("id");
-		const form = this.$$("contacts_form");
+		webix.promise.all([
+			contactsCollection.waitData,
+			countriesCollection.waitData,
+			statusesCollection.waitData
+		]).then(() => {
+			const id = this.getParam("id");
+			const form = this.$$("contacts_form");
 
-		if (id) {
-			const item = contactsCollection.getItem(id);
-			form.setValues(item);
-		}
-		else {
-			form.clear();
-		}
+			if (id) {
+				const item = contactsCollection.getItem(id);
+				form.setValues(item);
+			}
+			else {
+				form.clear();
+			}
+		});
 	}
 
 	updateContact() {
