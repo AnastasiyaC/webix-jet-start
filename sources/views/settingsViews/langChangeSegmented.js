@@ -11,8 +11,8 @@ export default class LangChangeSegmented extends JetView {
 			value: lang,
 			label: _("Language"),
 			options: [
-				{id: "en", value: "English"},
-				{id: "ru", value: "Russian"}
+				{id: "en", value: _("English")},
+				{id: "ru", value: _("Russian")}
 			],
 			click: () => this.toggleLanguage()
 		};

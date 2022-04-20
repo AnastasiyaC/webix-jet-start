@@ -1,5 +1,7 @@
 export default {
 	Language: "Язык",
+	English: "Английский",
+	Russian: "Русский",
 	MENU: "МЕНЮ",
 	Contacts: "Контакты",
 	Data: "Данные",

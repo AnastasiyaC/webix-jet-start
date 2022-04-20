@@ -12,26 +12,23 @@ export default class ContactsForm extends JetView {
 			view: "form",
 			localId: "contacts_form",
 			width: 500,
+			elementsConfig: {
+				on: {
+					onFocus: () => {
+						this.clearFormValidation();
+					}
+				}
+			},
 			elements: [
 				{
 					view: "text",
 					label: _("Name"),
-					name: "Name",
-					on: {
-						onFocus: () => {
-							this.clearFormValidation();
-						}
-					}
+					name: "Name"
 				},
 				{
 					view: "text",
 					label: _("Email"),
-					name: "Email",
-					on: {
-						onFocus: () => {
-							this.clearFormValidation();
-						}
-					}
+					name: "Email"
 				},
 				{
 					view: "combo",
@@ -42,11 +39,6 @@ export default class ContactsForm extends JetView {
 							template: "#Name#"
 						},
 						data: countriesCollection
-					},
-					on: {
-						onFocus: () => {
-							this.clearFormValidation();
-						}
 					}
 				},
 				{
@@ -58,11 +50,6 @@ export default class ContactsForm extends JetView {
 							template: "#Name#"
 						},
 						data: statusesCollection
-					},
-					on: {
-						onFocus: () => {
-							this.clearFormValidation();
-						}
 					}
 				},
 				{

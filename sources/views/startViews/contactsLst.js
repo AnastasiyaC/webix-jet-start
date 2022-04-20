@@ -13,11 +13,12 @@ export default class ContactsList extends JetView {
 				{
 					view: "list",
 					localId: "contacts_list",
+					css: "list--position",
 					template: (obj) => {
 						const country = countriesCollection.getItem(obj.Country).Name || "country not found";
 						const status = statusesCollection.getItem(obj.Status).Name || "country not found";
 
-						return `name: <b>${obj.Name}</b><br>email: ${obj.Email}<br>country: ${country}<br>status: ${status}`;
+						return `name: <b>${obj.Name}</b><br>email: ${obj.Email}<br>country: ${country}<br>status: ${status} <span class="webix_icon wxi-close webix_icon--pos_right-top"></span>`;
 					},
 					select: true,
 					type: {
@@ -53,7 +54,7 @@ export default class ContactsList extends JetView {
 
 	init() {
 		const list = this.$$("contacts_list");
-		list.parse(contactsCollection);
+		list.sync(contactsCollection);
 
 		this.setIdParam();
 		this.on(list, "onAfterSelect", id => this.show(`./startPage?id=${id}`));

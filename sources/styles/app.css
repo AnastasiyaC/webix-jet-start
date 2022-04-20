@@ -61,3 +61,11 @@
     align-items: center;
     justify-content: flex-end;
 }
+.list--position .webix_list_item {
+    position: relative;
+}
+.webix_icon--pos_right-top {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
