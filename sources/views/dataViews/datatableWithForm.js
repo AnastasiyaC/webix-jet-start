@@ -58,15 +58,8 @@ export default class DatatableWithForm extends JetView {
 						{id: "delete", header: "", template: "{common.trashIcon()}"}
 					],
 					onClick: {
-						"wxi-trash": function (e, id) {
-							webix.confirm({
-								title: _("Delete"),
-								text: _("Delete line"),
-								ok: _("Yes"),
-								cancel: _("No")
-							}).then(() => {
-								this.remove(id);
-							});
+						"wxi-trash": (e, id) => {
+							this.deleteDatatableItem(id);
 						}
 					},
 					rules: {
@@ -78,21 +71,35 @@ export default class DatatableWithForm extends JetView {
 	}
 
 	init() {
-		this.$$("datatable_main").parse(this._gridData);
+		this.$$("datatable_main").sync(this._gridData);
 	}
 
 	addToDatatable() {
+		this._gridData.waitData.then(() => {
+			const _ = this.app.getService("locale")._;
+			const form = this.$$("form_update-datatable");
+
+			if (form.validate()) {
+				const item = form.getValues();
+
+				this._gridData.add(item);
+				form.clear();
+				webix.message(_("Update datatable"));
+			}
+		});
+	}
+
+	deleteDatatableItem(id) {
 		const _ = this.app.getService("locale")._;
-		const form = this.$$("form_update-datatable");
-		const datatable = this.$$("datatable_main");
 
-		if (form.validate()) {
-			const item = form.getValues();
-
-			datatable.add(item);
-			form.clear();
-			webix.message(_("Update datatable"));
-		}
+		webix.confirm({
+			title: _("Delete"),
+			text: _("Delete line"),
+			ok: _("Yes"),
+			cancel: _("No")
+		}).then(() => {
+			this._gridData.remove(id);
+		});
 	}
 
 	clearFormValidation() {
